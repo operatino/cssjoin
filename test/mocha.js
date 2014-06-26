@@ -17,20 +17,20 @@ var isWindows = function(){
 }
 
 describe("lib/CssJoin Object", function () {
-  it("accepts no path option ", function(){
+  it("none path option ", function(){
     // none
     var CssJoin = cssJoin("", {}, function(){});
     assert.deepEqual(CssJoin.getPaths("./test/fixture/simple/input.css"), 
                     ["./test/fixture/simple"]);
   });
-  it("accepts a string path option ", function(){
+  it("string path option ", function(){
     // string
     var CssJoin = cssJoin("", {paths : "/tmp"}, function(){});
     assert.deepEqual(CssJoin.getPaths(), ["/tmp"]);
     assert.deepEqual(CssJoin.getPaths("./test/fixture/simple/input.css"), 
                     ["./test/fixture/simple","/tmp"]);
   });
-  it("accepts an array path option ", function(){
+  it("array path option ", function(){
     // array 
     var CssJoin = cssJoin("", {paths : ["/tmp"]}, function(){});
     assert.deepEqual(CssJoin.getPaths(), ["/tmp"]);
@@ -42,7 +42,7 @@ describe("lib/CssJoin Object", function () {
 
 describe("resolve path", function(){
   describe('util', function () {
-    it('resolves some patterns', function () {
+    it('resolve some pattern', function () {
       var fileNamePattern = ["/parts.css" , "parts.css", "./parts.css"];
       var resolvePathPattern = [
         ["./test/fixture/resolve_path/input/htdocs"],
@@ -63,13 +63,13 @@ describe("resolve path", function(){
         }
       }
     });
-    it("can't resolve a pattern for a missing file", function(){
+    it("cant resolve pattern", function(){
       var result = utils._resolvePath("not.css",["./test/fixture/unknown"]);
       assert.equal(result, null);
     })
   });
   describe('lib', function () {
-    it("Resolves path test", function(done){
+    it("Resolve path test", function(done){
       var opt = {
         paths : [
           "./test/fixture/resolve_path/input/htdocs",
@@ -79,7 +79,7 @@ describe("resolve path", function(){
       cssJoin("./test/fixture/resolve_path/input/main.css", opt, 
         function(err ,result){
           var expect = read("./test/fixture/resolve_path/output/main.css");
-          assert.equal(result, expect);
+          assert.equal(expect, result);
           done();
         }
       );
@@ -106,7 +106,7 @@ describe("resolve path", function(){
         //console.log(_command);
         cp.exec(_command,function(error, stdout, stderr){
           var expect = read("./test/fixture/resolve_path/output/main.css");
-          assert.equal(stdout, expect);
+          assert.equal(stdout,expect);
           done();
         });
       });
@@ -115,11 +115,11 @@ describe("resolve path", function(){
 })
 
 describe("bin/cssjoin",function(){
-  it("Executes without option", function(done){
+  it("Execute without option", function(done){
     cp.exec("node bin/cssjoin.js ./test/fixture/basic/input/main.css",
       function(error, stdout, stderr){
         var expect = read("./test/fixture/basic/output/main.css");
-        assert.equal(stdout, expect);
+        assert.equal(expect,stdout);
         done();
       }
     );
@@ -127,21 +127,21 @@ describe("bin/cssjoin",function(){
 });
 
 describe("lib/cssjoin",function(){
-  it("Executes with no options",function(done){
+  it("Execute with no option",function(done){
     cssJoin("./test/fixture/basic/input/main.css", function(err,result){
       var expect = read("./test/fixture/basic/output/main.css");
-      assert.equal(result,expect);
+      assert.equal(expect, result);
       done();
     });
   });
-  it("Executes with empty options",function(done){
+  it("Execute with empty option",function(done){
     cssJoin("./test/fixture/basic/input/main.css",{}, function(err,result){
       var expect = read("./test/fixture/basic/output/main.css");
-      assert.equal(result,expect);
+      assert.equal(expect, result);
       done();
     });
   });
-  it("Executes with options non-destructively",function(done){
+  it("Execute with option not destructive",function(done){
     var opt = {paths : "/hoge"};
     cssJoin("./test/fixture/basic/input/main.css",opt, function(err,result){
       assert.deepEqual(opt, {paths : "/hoge"});
@@ -157,7 +157,7 @@ describe("lib/cssjoin",function(){
       }
     );
   });
-  it("Handles url @import ", function(done){
+  it("url @import ", function(done){
     cssJoin("./test/fixture/exist_url/input/main.css",
       function(err ,result){
         var expect = read("./test/fixture/exist_url/output/main.css");
@@ -166,46 +166,37 @@ describe("lib/cssjoin",function(){
       }
     );
   });
-  it("Handles url single quote @import ", function(done){
-    cssJoin("./test/fixture/exist_url_single_quote/input/main.css",
+  it("url single quate @import ", function(done){
+    cssJoin("./test/fixture/exist_url_single_quate/input/main.css",
       function(err ,result){
-        var expect = read("./test/fixture/exist_url_single_quote/output/main.css");
-        assert.equal(result, expect);
+        var expect = read("./test/fixture/exist_url_single_quate/output/main.css");
+        assert.equal(expect, result);
         done();
       }
     );
   });
-  it("Handles url double quote @import ", function(done){
-    cssJoin("./test/fixture/exist_url_double_quote/input/main.css",
+  it("url double quate @import ", function(done){
+    cssJoin("./test/fixture/exist_url_double_quate/input/main.css",
       function(err ,result){
-        var expect = read("./test/fixture/exist_url_double_quote/output/main.css");
-        assert.equal(result, expect);
-        done();
-      }
-    );
-  });
-  it("adjusts relative references to external resources",function(done){
-    cssJoin("./test/fixture/url_resource/input/main.css",
-      function(err,result){
-        var expect = read("./test/fixture/url_resource/output/main.css");
-        assert.equal(result, expect);
+        var expect = read("./test/fixture/exist_url_double_quate/output/main.css");
+        assert.equal(expect, result);
         done();
       }
     );
   });
   
-  it("Throws an error option when it can't resolve an @import")  
-  it("Creates a Map")
+  it("Throw error option when can't resolve @import")  
+  it("Create Map")
   it("Extend Test")
   it("Twice time called")
 })
 
 describe("util", function(){
-  it("removes simple css comments", function(){    
-    assert.equal( utils._removeComments("/* aa */ bb")," bb");
-    assert.equal( utils._removeComments("/* aa */ bb /* cc */")," bb ");
+  it("css removing comment simple", function(){    
+    assert.equal( utils._removeComment("/* aa */ bb")," bb");
+    assert.equal( utils._removeComment("/* aa */ bb /* cc */")," bb ");
   });
-  it("removes css comment return codes", function(){
+  it("css removing comment return code", function(){
     // remove css
     var input = "/* hoge\n"
               + "age\n"
@@ -219,10 +210,10 @@ describe("util", function(){
     var expect = "\n"
                +"\n\rboke\n"
                +"uga\n";
-    var result = utils._removeComments(input);
+    var result = utils._removeComment(input);
     assert.equal(result,expect)
   });
-  it("creates replace maps",function(){
+  it("Replace map",function(){
     var cssFilePath = "./test/fixture/replace_map_test/dir/replace_map.css"
     var css = fs.readFileSync(cssFilePath, "utf-8");
     var result = utils.getReplaceMap(css,[path.dirname(cssFilePath)])
@@ -232,12 +223,12 @@ describe("util", function(){
       }
       //assert length
       assert.equal(expect.length, result.length);
-      // assert result
+      // assert reuslt
       for(var key in expect){
         assert.equal(path.resolve(expect[key]),path.resolve(result[key]));
       }
   });
-  it("finds import files", function(){
+  it("findImportFile", function(){
     var utils = rewire("../lib/util.js");
     var findImportFile = utils.__get__("findImportFile");
     assert.equal(findImportFile("@import url(./path.css)"), "./path.css");

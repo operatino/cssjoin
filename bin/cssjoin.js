@@ -18,10 +18,6 @@ var paths = program.path || program.includePath
 var options = {
   paths : paths
 };
-if(program.args[0] == undefined){
-  program.outputHelp()
-  return;
-}
 cssjoin(program.args[0],options, function(err,result){
   if(err){
     process.stderr.write(err + "\n");
